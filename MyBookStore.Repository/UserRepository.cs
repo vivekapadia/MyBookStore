@@ -28,7 +28,7 @@ namespace MyBookStore.Repository
             {
                 Firstname = model.Firstname,
                 Lastname = model.Lastname,
-                Email = model.Email,
+                Email = model.Email.ToLower(),
                 Password = model.Password,
                 Roleid = model.Roleid,
             };
@@ -68,11 +68,15 @@ namespace MyBookStore.Repository
 
         public bool UpdateUser(User model)
         {
-            // check for valid conditions wrt DB table properties
-            //if (model.Id > 0 && model.Firstname != String.Empty && model.Email != String.Empty && model.Roleid>0 && model.Roleid<4)
-
-            if (model.Id > 0 && !string.IsNullOrEmpty(model.Firstname) && !string.IsNullOrEmpty(model.Email) && model.Roleid>0 && model.Roleid<4)
+            // check for valid conditions
+            if (model.Id > 0)
             {
+                // valid input roleid
+                if(model.Roleid < 1 || model.Roleid > 3)
+                {
+                    throw new Exception("Exception : Roleid Invalid");
+                }
+
                 _context.Update(model);
                 _context.SaveChanges();
 

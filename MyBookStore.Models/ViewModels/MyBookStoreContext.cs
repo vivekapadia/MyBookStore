@@ -51,6 +51,7 @@ namespace MyBookStore.Models.ViewModels
                     .HasColumnName("firstname");
 
                 entity.Property(e => e.Lastname)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("lastname");
 

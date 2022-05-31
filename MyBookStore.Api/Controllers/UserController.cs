@@ -68,7 +68,7 @@ namespace MyBookStore.Api.Controllers
         {
             try
             {
-                // check is provied model is null
+                // check provied model is null
                 if (model != null)
                 {
                     // get the data for DB for specific user id
@@ -80,8 +80,9 @@ namespace MyBookStore.Api.Controllers
                     user.Lastname = model.Lastname;
                     user.Email = model.Email;
                     user.Roleid = model.Roleid;
-                      
+
                     var isSaved = _repository.UpdateUser(user);
+
                     if (isSaved)
                     {
                         return StatusCode(HttpStatusCode.OK.GetHashCode(), "User detail updated successfully");
