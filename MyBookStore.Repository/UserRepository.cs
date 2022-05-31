@@ -1,5 +1,6 @@
 ﻿//All the business logic FILE
 
+// to use properties from respective files
 using MyBookStore.Models.ViewModels;
 using MyBookStore.Models.Models;
 
@@ -16,24 +17,6 @@ namespace MyBookStore.Repository
     {
         MyBookStoreContext _context = new MyBookStoreContext();
 
-        public List<User> GetUsers(int pageIndex, int pageSize, string keyword)
-        {
-            var users = _context.Users.AsQueryable();
-
-            if (pageIndex > 0)
-            {
-                if (string.IsNullOrEmpty(keyword) == false)
-                {
-                    users = users.Where(w => w.FirstName.ToLower().Contains(keyword.ToLower()) || w.LastName.ToLower().Contains(keyword.ToLower()));
-                }
-
-                var userList = users.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-                return userList;
-            }
-
-            return null;
-        }
-
         public User Login(LoginModel model)
         {
             return _context.Users.FirstOrDefault(c => c.Email.Equals(model.Email.ToLower()) && c.Password.Equals(model.Password));
@@ -43,10 +26,11 @@ namespace MyBookStore.Repository
         {
             User user = new User()
             {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
+                Firstname = model.Firstname,
+                Lastname = model.Lastname,
                 Email = model.Email,
                 Password = model.Password,
+                Roleid = model.Roleid,
             };
 
             var entry = _context.Users.Add(user);
@@ -54,5 +38,62 @@ namespace MyBookStore.Repository
             return entry.Entity;
         }
 
+        public User GetUser(int id)
+        {
+            if (id > 0)
+            {
+                return _context.Users.Where(w => w.Id == id).FirstOrDefault();
+            }
+
+            return null;
+        }
+
+        public List<User> GetUsers(int pageIndex, int pageSize, string keyword)
+        {
+            var users = _context.Users.AsQueryable();
+
+            if (pageIndex > 0)
+            {
+                if (string.IsNullOrEmpty(keyword) == false)
+                {
+                    users = users.Where(w => w.Firstname.ToLower().Contains(keyword.ToLower()) || w.Lastname.ToLower().Contains(keyword.ToLower()));
+                }
+
+                var userList = users.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+                return userList;
+            }
+
+            return null;
+        }
+
+        public bool UpdateUser(User model)
+        {
+            // check for valid conditions wrt DB table properties
+            //if (model.Id > 0 && model.Firstname != String.Empty && model.Email != String.Empty && model.Roleid>0 && model.Roleid<4)
+
+            if (model.Id > 0 && !string.IsNullOrEmpty(model.Firstname) && !string.IsNullOrEmpty(model.Email) && model.Roleid>0 && model.Roleid<4)
+            {
+                _context.Update(model);
+                _context.SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool DeleteUser(User model)
+        {
+            // check for valid Id in DB and Remove the Record
+            if (model.Id > 0)
+            {
+                _context.Remove(model);
+                _context.SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
     }
 }

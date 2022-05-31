@@ -18,7 +18,7 @@ namespace MyBookStore.Api.Controllers
     {
         UserRepository _repository = new UserRepository();
 
-        [Route("Login")]
+        [Route("login")]
         [HttpPost]
         public IActionResult Login(LoginModel model)
         {
@@ -37,7 +37,7 @@ namespace MyBookStore.Api.Controllers
 
         }
 
-        [Route("Register")]
+        [Route("register")]
         [HttpPost]
         public IActionResult Register(RegisterModel model)
         {

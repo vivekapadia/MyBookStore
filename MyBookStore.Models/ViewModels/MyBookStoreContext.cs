@@ -24,7 +24,7 @@ namespace MyBookStore.Models.ViewModels
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=BookStore;User Id=postgres;Password=admin;");
+                optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=MyBookStore;User Id=postgres;Password=admin;");
             }
         }
 
@@ -36,21 +36,30 @@ namespace MyBookStore.Models.ViewModels
             {
                 entity.ToTable("User");
 
-                entity.Property(e => e.Id).UseIdentityAlwaysColumn();
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .UseIdentityAlwaysColumn();
 
                 entity.Property(e => e.Email)
                     .IsRequired()
-                    .HasColumnType("character varying");
+                    .HasMaxLength(100)
+                    .HasColumnName("email");
 
-                entity.Property(e => e.FirstName)
+                entity.Property(e => e.Firstname)
                     .IsRequired()
-                    .HasColumnType("character varying");
+                    .HasMaxLength(50)
+                    .HasColumnName("firstname");
 
-                entity.Property(e => e.LastName).HasColumnType("character varying");
+                entity.Property(e => e.Lastname)
+                    .HasMaxLength(50)
+                    .HasColumnName("lastname");
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasColumnType("character varying");
+                    .HasMaxLength(100)
+                    .HasColumnName("password");
+
+                entity.Property(e => e.Roleid).HasColumnName("roleid");
             });
 
             OnModelCreatingPartial(modelBuilder);
