@@ -12,11 +12,8 @@ using System.Threading.Tasks;
 
 namespace MyBookStore.Repository
 {
-    public class UserRepository
-
+    public class UserRepository : BaseRepository
     {
-        MyBookStoreContext _context = new MyBookStoreContext();
-
         public User Login(LoginModel model)
         {
             return _context.Users.FirstOrDefault(c => c.Email.Equals(model.Email.ToLower()) && c.Password.Equals(model.Password));
@@ -55,7 +52,7 @@ namespace MyBookStore.Repository
             if (pageIndex > 0)
             {
                 if (string.IsNullOrEmpty(keyword) == false)
-                {
+                {   
                     users = users.Where(w => w.Firstname.ToLower().Contains(keyword.ToLower()) || w.Lastname.ToLower().Contains(keyword.ToLower()));
                 }
 
