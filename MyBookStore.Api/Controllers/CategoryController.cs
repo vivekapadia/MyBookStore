@@ -17,13 +17,13 @@ namespace MyBookStore.Api.Controllers
         CategoryRepository _categoryRepository = new CategoryRepository();
 
         [HttpGet]
-        [Route("categoryist")]
-        [ProducesResponseType(typeof(String), (int)HttpStatusCode.BadRequest)]
+        [Route("list")]
+        [ProducesResponseType(typeof(CategoryModel), (int)HttpStatusCode.OK)]
         public IActionResult GetCategories(int pageIndex = 1, int pageSize = 10, string keyword = "")
         {
             try
             {
-                var categories = _categoryRepository.AllCategories(pageIndex, pageSize, keyword);
+                ListResponse<Category> categories = _categoryRepository.AllCategories(pageIndex, pageSize, keyword);
                 ListResponse<CategoryModel> listResponse = new ListResponse<CategoryModel>()
                 {
                     Results = categories.Results.Select(c => new CategoryModel(c)),

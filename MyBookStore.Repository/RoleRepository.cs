@@ -36,6 +36,11 @@ namespace MyBookStore.Repository
 
         public Role AddRole(Role role)
         {
+            if (role == null || role.Id <= 0)
+            {
+                return null;
+            }
+
             Role exist = GetRole(role.Id);
 
             if(exist == null)
@@ -50,6 +55,11 @@ namespace MyBookStore.Repository
 
         public Role UpdateRole (Role role)
         {
+            if(role == null || role.Id <= 0)
+            {
+                return null;
+            }
+
             Role exist = GetRole(role.Id);
 
             if (exist == null)

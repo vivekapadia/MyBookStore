@@ -16,6 +16,10 @@ namespace MyBookStore.Repository
     {
         public User Login(LoginModel model)
         {
+            if (model == null)
+            {
+                return null;
+            }
             return _context.Users.FirstOrDefault(c => c.Email.Equals(model.Email.ToLower()) && c.Password.Equals(model.Password));
         }
 
@@ -39,46 +43,57 @@ namespace MyBookStore.Repository
         {
             if (id > 0)
             {
-                return _context.Users.Where(w => w.Id == id).FirstOrDefault();
+                return _context.Users.FirstOrDefault(w => w.Id == id);
             }
 
             return null;
         }
 
-        public List<User> GetUsers(int pageIndex, int pageSize, string keyword)
+        public ListResponse<User> GetUsers(int pageIndex, int pageSize, string keyword)
         {
-            var users = _context.Users.AsQueryable();
+            keyword = keyword?.ToLower().Trim();
+            var query = _context.Users.Where(c
+                => keyword == null
+                || c.Firstname.ToLower().Contains(keyword)
+                || c.Lastname.ToLower().Contains(keyword)
+            ).AsQueryable();
 
-            if (pageIndex > 0)
+            int totalRecords = query.Count();
+            IEnumerable<User> users = query.Skip((pageIndex - 1) * pageSize).Take(pageSize);
+
+            return new ListResponse<User>()
             {
-                if (string.IsNullOrEmpty(keyword) == false)
-                {   
-                    users = users.Where(w => w.Firstname.ToLower().Contains(keyword.ToLower()) || w.Lastname.ToLower().Contains(keyword.ToLower()));
-                }
-
-                var userList = users.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-                return userList;
-            }
-
-            return null;
+                Results = users,
+                TotalRecords = totalRecords,
+            };
         }
 
-        public bool UpdateUser(User model)
+        public User UpdateUser(User model)
         {
-            // check for valid conditions
-            if (model.Id > 0)
+            if (model == null || model.Id <= 0)
             {
-                _context.Update(model);
+                return null;
+            }
+
+            User exist = GetUser(model.Id);
+            if (exist != null)
+            {
+                var entry = _context.Update(model);
                 _context.SaveChanges();
 
-                return true;
+                return entry.Entity;
             }
 
-            return false;
+            return null;
         }
 
         public bool DeleteUser(User model)
         {
+            if (model == null || model.Id <= 0)
+            {
+                return false;
+            }
+
             _context.Users.Remove(model);
             _context.SaveChanges();
             return true;

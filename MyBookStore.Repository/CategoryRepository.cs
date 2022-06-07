@@ -28,21 +28,50 @@ namespace MyBookStore.Repository
 
         public Category GetCategory(int id)
         {
-            return _context.Categories.FirstOrDefault(c => c.Id == id);
+            if (id > 0)
+            {
+                return _context.Categories.FirstOrDefault(c => c.Id == id);
+            }
+
+            return null;
         }
 
         public Category AddCategory(Category category)
         {
-            var entry = _context.Categories.Add(category);
-            _context.SaveChanges();
-            return entry.Entity;
+            if (category == null || category.Id <= 0)
+            {
+                return null;
+            }
+
+            Category exist = GetCategory(category.Id);
+            if (exist != null)
+            {
+                var entry = _context.Categories.Add(category);
+                _context.SaveChanges();
+                return entry.Entity;
+            }
+
+            return null;
+
+            
         }
 
         public Category UpdateCategory(Category category)
         {
-            var entry = _context.Categories.Update(category);
-            _context.SaveChanges();
-            return entry.Entity;
+            if (category == null || category.Id <= 0)
+            {
+                return null;
+            }
+
+            Category exist = GetCategory(category.Id);
+            if (exist != null)
+            {
+                var entry = _context.Categories.Update(category);
+                _context.SaveChanges();
+                return entry.Entity;
+            }
+            
+            return null;
         }
 
         public bool DeleteCategory(int id)

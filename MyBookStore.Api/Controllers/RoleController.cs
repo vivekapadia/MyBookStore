@@ -18,11 +18,13 @@ namespace MyBookStore.Api.Controllers
 
         [Route("list")]
         [HttpGet]
+        [ProducesResponseType(typeof(RoleModel), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BadRequestObjectResult), (int)HttpStatusCode.BadRequest)]
         public IActionResult GetRoles()
         {
             try
             {
-                var roles = _roleRepository.AllRoles();
+                ListResponse<Role> roles = _roleRepository.AllRoles();
                 ListResponse<RoleModel> listResponse = new ListResponse<RoleModel>()
                 {
                     Results = roles.Results.Select(c => new RoleModel(c)),
@@ -39,19 +41,19 @@ namespace MyBookStore.Api.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        [ProducesResponseType(typeof(Role), (int)HttpStatusCode.OK)]
-
+        [ProducesResponseType(typeof(RoleModel), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(String), (int)HttpStatusCode.NotFound)]
         public IActionResult GetRole(int id)
         {
             try
             {
                 Role role = _roleRepository.GetRole(id);
-                RoleModel roleModel = new RoleModel(role);
 
                 if (role == null)
                     return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "No, Such User - Please provide correct information");
 
-                return Ok(role);
+                RoleModel roleModel = new RoleModel(role);
+                return Ok(roleModel);
             }
             catch (Exception ex)
             {
@@ -61,7 +63,7 @@ namespace MyBookStore.Api.Controllers
 
         [Route("add")]
         [HttpPost]
-        [ProducesResponseType(typeof(CategoryModel), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(RoleModel), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(String), (int)HttpStatusCode.BadRequest)]
         public IActionResult AddRole(RoleModel model)
         {
@@ -77,7 +79,7 @@ namespace MyBookStore.Api.Controllers
                     Id = model.Id,
                     Name = model.Name
                 };
-                var response = _roleRepository.AddRole(role);
+                Role response = _roleRepository.AddRole(role);
                 RoleModel roleModel = new RoleModel(response);
 
                 if (roleModel != null)
@@ -96,6 +98,8 @@ namespace MyBookStore.Api.Controllers
 
         [Route("update")]
         [HttpPut]
+        [ProducesResponseType(typeof(RoleModel), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(String), (int)HttpStatusCode.BadRequest)]
         public IActionResult UpdateRole(RoleModel model)
         {
             try
@@ -128,6 +132,8 @@ namespace MyBookStore.Api.Controllers
 
         [Route("delete/{id}")]
         [HttpDelete]
+        [ProducesResponseType(typeof(String), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(String), (int)HttpStatusCode.NotFound)]
         public IActionResult DeleteRole(int id)
         {
             try

@@ -25,6 +25,7 @@ namespace MyBookStore.Api.Controllers
 
         [Route("login")]
         [HttpPost]
+        [ProducesResponseType(typeof(LoginModel), (int)HttpStatusCode.OK)]
         public IActionResult Login(LoginModel model)
         {
             try
@@ -44,6 +45,7 @@ namespace MyBookStore.Api.Controllers
 
         [Route("register")]
         [HttpPost]
+        [ProducesResponseType(typeof(RegisterModel), (int)HttpStatusCode.OK)]
         public IActionResult Register(RegisterModel model)
         {
             try

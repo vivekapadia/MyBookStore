@@ -5,8 +5,10 @@
 using Microsoft.AspNetCore.Mvc;
 
 // to use properties from respective files
-using MyBookStore.Repository;
+using MyBookStore.Models.ViewModels;
 using MyBookStore.Models.Models;
+using MyBookStore.Repository;
+
 
 // For HttpStatusCode
 using System.Net;
@@ -14,45 +16,32 @@ using System.Net;
 // For Exception
 using System;
 
+using System.Linq;
 
 namespace MyBookStore.Api.Controllers
 {
     [ApiController]
     [Route("api/user")]
+    [ProducesResponseType(typeof(UserModel), (int)HttpStatusCode.OK)]
     public class UserController : ControllerBase
     {
         UserRepository _userRepository = new UserRepository();
 
         [HttpGet]
-        [Route("{id}")]
-        public IActionResult GetUser(int id)
-        {
-            try
-            {
-                var user = _userRepository.GetUser(id);
-                if (user == null)
-                    return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "No, Such User - Please provide correct information");
-
-                return StatusCode(HttpStatusCode.OK.GetHashCode(), user);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex.Message);
-            }
-        }
-
-        [HttpGet]
         [Route("list")]
+
         public IActionResult GetUsers(int pageIndex = 1, int pageSize = 10, string keyword = "")
         {
             try
             {
-                var users = _userRepository.GetUsers(pageIndex, pageSize, keyword);
+                ListResponse<User> users = _userRepository.GetUsers(pageIndex, pageSize, keyword);
+                ListResponse<UserModel> listResponse = new ListResponse<UserModel>()
+                {
+                    Results = users.Results.Select(u => new UserModel(u)),
+                    TotalRecords = users.TotalRecords,
+                };
 
-                if (users == null || users.Count == 0)
-                    return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "No, Such User - Please provide correct information");
-
-                return StatusCode(HttpStatusCode.OK.GetHashCode(), users);
+                return Ok(listResponse);
             }
             catch (Exception ex)
             {
@@ -61,17 +50,37 @@ namespace MyBookStore.Api.Controllers
 
         }
 
+        [HttpGet]
+        [Route("{id}")]
+        [ProducesResponseType(typeof(UserModel), (int)HttpStatusCode.OK)]
+        public IActionResult GetUser(int id)
+        {
+            try
+            {
+                User user = _userRepository.GetUser(id);
+
+                if (user == null)
+                    return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "No, Such User - Please provide correct information");
+
+                UserModel userModel = new UserModel(user);
+                return Ok(userModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), ex.Message);
+            }
+        }
+
         [HttpPatch]
         [Route("update")]
-        // Pass the UserModel in Swagger UI 
+        [ProducesResponseType(typeof(String), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(String), (int)HttpStatusCode.NotFound)]
         public IActionResult UpdateUser(UserModel model)
         {
             try
             {
-                // check provied model is null
                 if (model != null)
                 {
-                    // get the data for DB for specific user id
                     var user = _userRepository.GetUser(model.Id);
                     if (user == null)
                         return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "User not found");
@@ -83,7 +92,7 @@ namespace MyBookStore.Api.Controllers
 
                     var isSaved = _userRepository.UpdateUser(user);
 
-                    if (isSaved)
+                    if (isSaved != null)
                     {
                         return StatusCode(HttpStatusCode.OK.GetHashCode(), "User detail updated successfully");
                     }
@@ -99,6 +108,8 @@ namespace MyBookStore.Api.Controllers
 
         [HttpDelete]
         [Route("delete")]
+        [ProducesResponseType(typeof(String), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(String), (int)HttpStatusCode.OK)]
         public IActionResult DeleteUser(int id)
         {
             try

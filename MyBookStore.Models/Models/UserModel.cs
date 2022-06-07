@@ -13,9 +13,9 @@ namespace MyBookStore.Models.Models
 {
     public class UserModel
     {
-        UserModel() { }
+        public UserModel() { }
 
-        UserModel(User user)
+        public UserModel(User user)
         {
             Id = user.Id;
             Firstname = user.Firstname;
