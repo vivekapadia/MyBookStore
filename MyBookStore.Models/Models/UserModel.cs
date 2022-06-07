@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyBookStore.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 
 // for Required
@@ -12,6 +13,17 @@ namespace MyBookStore.Models.Models
 {
     public class UserModel
     {
+        UserModel() { }
+
+        UserModel(User user)
+        {
+            Id = user.Id;
+            Firstname = user.Firstname;
+            Lastname = user.Lastname;
+            Email = user.Email;
+            Roleid = user.Roleid;
+        }
+
         [Required]
         public int Id { get; set; }
 

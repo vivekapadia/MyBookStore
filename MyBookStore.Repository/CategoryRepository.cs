@@ -11,7 +11,7 @@ namespace MyBookStore.Repository
 {
     public class CategoryRepository : BaseRepository
     {
-        public ListResponse<Category> GetCategories(int pageIndex, int pageSize, string keyword)
+        public ListResponse<Category> AllCategories(int pageIndex, int pageSize, string keyword)
         {
             keyword = keyword?.ToLower()?.Trim();
             var query = _context.Categories.Where(c => keyword == null || c.Name.ToLower().Contains(keyword)).AsQueryable();

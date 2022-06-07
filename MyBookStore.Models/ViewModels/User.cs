@@ -13,5 +13,7 @@ namespace MyBookStore.Models.ViewModels
         public string Email { get; set; }
         public string Password { get; set; }
         public int Roleid { get; set; }
+
+        public virtual Role Role { get; set; }
     }
 }

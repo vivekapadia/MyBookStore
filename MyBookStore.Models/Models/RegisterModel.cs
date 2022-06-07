@@ -24,7 +24,6 @@ namespace MyBookStore.Models.Models
         [Required]
         public string Password { get; set; }
 
-        [Required]
         public int Roleid { get; set; }
     }
 }

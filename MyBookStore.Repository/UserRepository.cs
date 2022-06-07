@@ -68,12 +68,6 @@ namespace MyBookStore.Repository
             // check for valid conditions
             if (model.Id > 0)
             {
-                // valid input roleid
-                if(model.Roleid < 1 || model.Roleid > 3)
-                {
-                    throw new Exception("Exception : Roleid Invalid");
-                }
-
                 _context.Update(model);
                 _context.SaveChanges();
 
@@ -85,16 +79,11 @@ namespace MyBookStore.Repository
 
         public bool DeleteUser(User model)
         {
-            // check for valid Id in DB and Remove the Record
-            if (model.Id > 0)
-            {
-                _context.Remove(model);
-                _context.SaveChanges();
-
-                return true;
-            }
-
-            return false;
+            _context.Users.Remove(model);
+            _context.SaveChanges();
+            return true;
         }
+
+        
     }
 }

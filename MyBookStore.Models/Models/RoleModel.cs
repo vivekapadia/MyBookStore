@@ -1,4 +1,5 @@
 ﻿using MyBookStore.Models.ViewModels;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace MyBookStore.Models.Models
 {
-    public class CategoryModel
+    public class RoleModel
     {
         // default constructor
-        public CategoryModel() { }
+        public RoleModel() { }
 
         // custom constructor
-        public CategoryModel(Category category)
+        public RoleModel(Role role)
         {
-            Id = category.Id;
-            Name = category.Name;
+            Id = role.Id;
+            Name = role.Name;
         }
 
         public int Id { get; set; }

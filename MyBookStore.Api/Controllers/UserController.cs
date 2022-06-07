@@ -21,7 +21,7 @@ namespace MyBookStore.Api.Controllers
     [Route("api/user")]
     public class UserController : ControllerBase
     {
-        UserRepository _repository = new UserRepository();
+        UserRepository _userRepository = new UserRepository();
 
         [HttpGet]
         [Route("{id}")]
@@ -29,7 +29,7 @@ namespace MyBookStore.Api.Controllers
         {
             try
             {
-                var user = _repository.GetUser(id);
+                var user = _userRepository.GetUser(id);
                 if (user == null)
                     return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "No, Such User - Please provide correct information");
 
@@ -47,7 +47,7 @@ namespace MyBookStore.Api.Controllers
         {
             try
             {
-                var users = _repository.GetUsers(pageIndex, pageSize, keyword);
+                var users = _userRepository.GetUsers(pageIndex, pageSize, keyword);
 
                 if (users == null || users.Count == 0)
                     return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "No, Such User - Please provide correct information");
@@ -72,7 +72,7 @@ namespace MyBookStore.Api.Controllers
                 if (model != null)
                 {
                     // get the data for DB for specific user id
-                    var user = _repository.GetUser(model.Id);
+                    var user = _userRepository.GetUser(model.Id);
                     if (user == null)
                         return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "User not found");
 
@@ -81,7 +81,7 @@ namespace MyBookStore.Api.Controllers
                     user.Email = model.Email;
                     user.Roleid = model.Roleid;
 
-                    var isSaved = _repository.UpdateUser(user);
+                    var isSaved = _userRepository.UpdateUser(user);
 
                     if (isSaved)
                     {
@@ -99,21 +99,17 @@ namespace MyBookStore.Api.Controllers
 
         [HttpDelete]
         [Route("delete")]
-        // Pass the UserID in Swagger UI 
         public IActionResult DeleteUser(int id)
         {
             try
             {
-                // valid ID
                 if (id > 0)
                 {
-                    // get particular user for the ID
-                    var user = _repository.GetUser(id);
+                    var user = _userRepository.GetUser(id);
                     if (user == null)
                         return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "User not found");
 
-                    // delete the user with that specific ID
-                    var isDeleted = _repository.DeleteUser(user);
+                    var isDeleted = _userRepository.DeleteUser(user);
                     if (isDeleted)
                     {
                         return StatusCode(HttpStatusCode.OK.GetHashCode(), "User detail deleted successfully");

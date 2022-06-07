@@ -18,6 +18,7 @@ namespace MyBookStore.Models.ViewModels
         }
 
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -36,6 +37,20 @@ namespace MyBookStore.Models.ViewModels
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.ToTable("category");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("name");
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.ToTable("role");
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
@@ -76,6 +91,12 @@ namespace MyBookStore.Models.ViewModels
                     .HasColumnName("password");
 
                 entity.Property(e => e.Roleid).HasColumnName("roleid");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.Roleid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("User");
             });
 
             OnModelCreatingPartial(modelBuilder);

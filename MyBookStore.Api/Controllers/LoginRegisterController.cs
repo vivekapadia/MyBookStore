@@ -10,11 +10,16 @@ using System.Net;
 // For Exception
 using System;
 
+// for EnableCors
+using Microsoft.AspNetCore.Cors;
+using System.Collections.Generic;
+
 namespace MyBookStore.Api.Controllers
 {
     [ApiController]
+    [EnableCors("bookstore")]
     [Route("api/public")]
-    public class MyBookStoreController : ControllerBase
+    public class LoginRegisterController : ControllerBase
     {
         UserRepository _repository = new UserRepository();
 
@@ -55,5 +60,8 @@ namespace MyBookStore.Api.Controllers
             }
 
         }
+
+        
     }
 }
+
