@@ -68,15 +68,21 @@ namespace MyBookStore.Api.Controllers
         {
             try
             {
-                if (model == null)
-                    return BadRequest("Model is null");
+                if (model == null || model.Id <= 0)
+                    return BadRequest("Provide Correct Information");
 
                 Category category = new Category()
                 {
                     Id = model.Id,
                     Name = model.Name
                 };
+
                 var response = _categoryRepository.AddCategory(category);
+                if (response == null)
+                {
+                    return BadRequest("Cant Add Category - Already Id Exist");
+                }
+
                 CategoryModel categoryModel = new CategoryModel(response);
 
                 return Ok(categoryModel);

@@ -53,7 +53,7 @@ namespace MyBookStore.Repository
         {
             keyword = keyword?.ToLower().Trim();
             var query = _context.Users.Where(c
-                => keyword == null
+                => String.IsNullOrEmpty(keyword)
                 || c.Firstname.ToLower().Contains(keyword)
                 || c.Lastname.ToLower().Contains(keyword)
             ).AsQueryable();

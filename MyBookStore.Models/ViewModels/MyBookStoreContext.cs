@@ -17,7 +17,9 @@ namespace MyBookStore.Models.ViewModels
         {
         }
 
+        public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Publisher> Publishers { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
@@ -34,6 +36,47 @@ namespace MyBookStore.Models.ViewModels
         {
             modelBuilder.HasAnnotation("Relational:Collation", "English_India.1252");
 
+            modelBuilder.Entity<Book>(entity =>
+            {
+                entity.ToTable("book");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Base64image).HasColumnName("base64image");
+
+                entity.Property(e => e.Categoryid).HasColumnName("categoryid");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(2000)
+                    .HasColumnName("description");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.Price)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("price");
+
+                entity.Property(e => e.Publisherid).HasColumnName("publisherid");
+
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Books)
+                    .HasForeignKey(d => d.Categoryid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_category");
+
+                entity.HasOne(d => d.Publisher)
+                    .WithMany(p => p.Books)
+                    .HasForeignKey(d => d.Publisherid)
+                    .HasConstraintName("fk_publisher");
+            });
+
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.ToTable("category");
@@ -44,6 +87,27 @@ namespace MyBookStore.Models.ViewModels
 
                 entity.Property(e => e.Name)
                     .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("name");
+            });
+
+            modelBuilder.Entity<Publisher>(entity =>
+            {
+                entity.ToTable("publisher");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Address)
+                    .HasMaxLength(500)
+                    .HasColumnName("address");
+
+                entity.Property(e => e.Contact)
+                    .HasMaxLength(20)
+                    .HasColumnName("contact");
+
+                entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .HasColumnName("name");
             });

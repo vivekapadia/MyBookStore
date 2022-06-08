@@ -69,9 +69,9 @@ namespace MyBookStore.Api.Controllers
         {
             try
             {
-                if(model == null)
+                if(model == null || model.Id <=0)
                 {
-                    return BadRequest("Null Passed - provide correct information");
+                    return BadRequest("provide correct information");
                 }
 
                 Role role = new Role()
@@ -80,13 +80,15 @@ namespace MyBookStore.Api.Controllers
                     Name = model.Name
                 };
                 Role response = _roleRepository.AddRole(role);
-                RoleModel roleModel = new RoleModel(response);
 
-                if (roleModel != null)
+                if (response == null)
                 {
-                    return Ok(roleModel);
+                    return BadRequest("Cant Add Role - Already Id Exist");
                 }
-                return BadRequest("Cant Add Role - provide correct information");
+
+                RoleModel roleModel = new RoleModel(response);
+                return Ok(roleModel);
+                
             }
             catch (Exception ex)
             {

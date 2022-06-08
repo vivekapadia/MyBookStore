@@ -17,7 +17,6 @@ using System.Collections.Generic;
 namespace MyBookStore.Api.Controllers
 {
     [ApiController]
-    [EnableCors("bookstore")]
     [Route("api/public")]
     public class LoginRegisterController : ControllerBase
     {
@@ -34,7 +33,9 @@ namespace MyBookStore.Api.Controllers
                 if (user == null)
                     return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "User not found");
 
-                return StatusCode(HttpStatusCode.OK.GetHashCode(), user);
+                UserModel userModel = new UserModel(user);
+
+                return StatusCode(HttpStatusCode.OK.GetHashCode(), userModel);
             }
             catch (Exception ex)
             {
@@ -54,7 +55,9 @@ namespace MyBookStore.Api.Controllers
                 if (user == null)
                     return StatusCode(HttpStatusCode.BadRequest.GetHashCode(), "Bad Request");
 
-                return StatusCode(HttpStatusCode.OK.GetHashCode(), user);
+                UserModel userModel = new UserModel(user);
+
+                return StatusCode(HttpStatusCode.OK.GetHashCode(), userModel);
             }
             catch (Exception ex)
             {

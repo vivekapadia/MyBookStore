@@ -16,8 +16,6 @@ namespace MyBookStore.Api
 {
     public class Startup
     {
-        readonly string corsPolicy = "bookstore";
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,7 +28,7 @@ namespace MyBookStore.Api
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(name: corsPolicy,
+                options.AddDefaultPolicy(
                     policy =>
                     {
                         policy
@@ -61,7 +59,7 @@ namespace MyBookStore.Api
 
             app.UseRouting();
 
-            app.UseCors(corsPolicy);
+            app.UseCors();
 
             app.UseAuthorization();
 
