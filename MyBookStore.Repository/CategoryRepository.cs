@@ -44,7 +44,7 @@ namespace MyBookStore.Repository
             }
 
             Category exist = GetCategory(category.Id);
-            if (exist != null)
+            if (exist == null)
             {
                 var entry = _context.Categories.Add(category);
                 _context.SaveChanges();

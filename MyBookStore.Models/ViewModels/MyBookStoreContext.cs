@@ -74,6 +74,7 @@ namespace MyBookStore.Models.ViewModels
                 entity.HasOne(d => d.Publisher)
                     .WithMany(p => p.Books)
                     .HasForeignKey(d => d.Publisherid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_publisher");
             });
 

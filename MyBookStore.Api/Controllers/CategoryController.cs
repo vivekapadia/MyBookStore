@@ -49,7 +49,12 @@ namespace MyBookStore.Api.Controllers
                 if (id <= 0)
                     return BadRequest("id cant be less than or equal to zero");
 
-                var category = _categoryRepository.GetCategory(id);
+                Category category = _categoryRepository.GetCategory(id);
+
+                if(category == null)
+                {
+                    return NotFound("NO Such category");
+                }
                 CategoryModel categoryModel = new CategoryModel(category);
 
                 return Ok(categoryModel);

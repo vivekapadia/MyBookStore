@@ -62,7 +62,7 @@ namespace MyBookStore.Repository
 
             Role exist = GetRole(role.Id);
 
-            if (exist == null)
+            if (exist != null)
             {
                 var entry = _context.Roles.Update(role);
                 _context.SaveChanges();

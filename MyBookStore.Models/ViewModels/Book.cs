@@ -13,7 +13,7 @@ namespace MyBookStore.Models.ViewModels
         public string Description { get; set; }
         public string Base64image { get; set; }
         public int Categoryid { get; set; }
-        public int? Publisherid { get; set; }
+        public int Publisherid { get; set; }
         public int? Quantity { get; set; }
 
         public virtual Category Category { get; set; }
