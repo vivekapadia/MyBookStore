@@ -38,7 +38,7 @@ namespace MyBookStore.Repository
 
         public Category AddCategory(Category category)
         {
-            if (category == null || category.Id <= 0)
+            if (category == null )
             {
                 return null;
             }

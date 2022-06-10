@@ -40,9 +40,7 @@ namespace MyBookStore.Models.ViewModels
             {
                 entity.ToTable("book");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Base64image).HasColumnName("base64image");
 
@@ -82,9 +80,7 @@ namespace MyBookStore.Models.ViewModels
             {
                 entity.ToTable("category");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -96,9 +92,7 @@ namespace MyBookStore.Models.ViewModels
             {
                 entity.ToTable("publisher");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Address)
                     .HasMaxLength(500)
@@ -117,9 +111,7 @@ namespace MyBookStore.Models.ViewModels
             {
                 entity.ToTable("role");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -131,9 +123,7 @@ namespace MyBookStore.Models.ViewModels
             {
                 entity.ToTable("User");
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .UseIdentityAlwaysColumn();
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Email)
                     .IsRequired()

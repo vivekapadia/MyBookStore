@@ -44,7 +44,7 @@ namespace MyBookStore.Repository
         }
         public Publisher AddPublisher(Publisher model)
         {
-            if(model == null || model.Id <= 0)
+            if(model == null )
             {
                 return null;
             }

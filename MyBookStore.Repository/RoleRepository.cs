@@ -36,7 +36,7 @@ namespace MyBookStore.Repository
 
         public Role AddRole(Role role)
         {
-            if (role == null || role.Id <= 0)
+            if (role == null )
             {
                 return null;
             }

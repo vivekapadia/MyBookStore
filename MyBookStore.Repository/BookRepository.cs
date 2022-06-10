@@ -36,7 +36,7 @@ namespace MyBookStore.Repository
 
         public Book AddBook(Book book)
         {
-            if (book == null || book.Id <= 0)
+            if (book == null)
             {
                 return null;
             }

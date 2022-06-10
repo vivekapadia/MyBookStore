@@ -110,12 +110,16 @@ namespace MyBookStore.Api.Controllers
                 if (model == null)
                     return BadRequest("Model is null");
 
-                Category category = new Category()
+                Category updateCategory = _categoryRepository.GetCategory(model.Id);
+                if (updateCategory == null)
                 {
-                    Id = model.Id,
-                    Name = model.Name
-                };
-                var response = _categoryRepository.UpdateCategory(category);
+                    return BadRequest("No Such ROLE found");
+                }
+
+                updateCategory.Id = model.Id;
+                updateCategory.Name = model.Name;
+
+                Category response = _categoryRepository.UpdateCategory(updateCategory);
                 CategoryModel categoryModel = new CategoryModel(response);
 
                 return Ok(categoryModel);

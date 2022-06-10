@@ -136,26 +136,31 @@ namespace MyBookStore.Api.Controllers
                     return NotFound("Book not Found");
                 }
 
-                var categoryExist = _categoryRepository.GetCategory(model.Categoryid);
-                var publiserExist = _publisherRepository.GetPublisher(model.Publisherid);
+                Category categoryExist = _categoryRepository.GetCategory(model.Categoryid);
+                Publisher publiserExist = _publisherRepository.GetPublisher(model.Publisherid);
 
                 if (categoryExist == null || publiserExist == null)
                 {
                     return BadRequest("category or publiser not found - Provide Correct Information");
                 }
 
-                Book book = new Book()
+                Book bookUpdate = _bookRepository.GetBook(model.Id);
+
+                if(bookUpdate == null)
                 {
-                    Id = model.Id,
-                    Name = model.Name,
-                    Price = model.Price,
-                    Description = model.Description,
-                    Base64image = model.Base64image,
-                    Categoryid = model.Categoryid,
-                    Publisherid = model.Publisherid,
-                    Quantity = model.Quantity,
-                };
-                var response = _bookRepository.UpdateBook(book);
+                    return NotFound("No Such Book Found");
+                }
+
+                bookUpdate.Id = model.Id;
+                bookUpdate.Name = model.Name;
+                bookUpdate.Price = model.Price;
+                bookUpdate.Description = model.Description;
+                bookUpdate.Base64image = model.Base64image;
+                bookUpdate.Categoryid = model.Categoryid;
+                bookUpdate.Publisherid = model.Publisherid;
+                bookUpdate.Quantity = model.Quantity;
+
+                Book response = _bookRepository.UpdateBook(bookUpdate);
                 BookModel bookModel = new BookModel(response);
 
                 return Ok(bookModel);

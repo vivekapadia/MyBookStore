@@ -32,9 +32,10 @@ namespace MyBookStore.Api
                     policy =>
                     {
                         policy
-                        .AllowAnyOrigin()
+                        //.WithOrigins("http://127.0.0.1:3000")
                         .AllowAnyMethod()
-                        .AllowAnyHeader();
+                        .AllowAnyHeader()
+                        .AllowAnyOrigin();
                     });
             });            
 
