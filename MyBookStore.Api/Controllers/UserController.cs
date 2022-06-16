@@ -71,11 +71,11 @@ namespace MyBookStore.Api.Controllers
             }
         }
 
-        [HttpPatch]
+        [HttpPut]
         [Route("update")]
         [ProducesResponseType(typeof(String), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(String), (int)HttpStatusCode.NotFound)]
-        public IActionResult UpdateUser(UserModel model)
+        public IActionResult UpdateUser(UpdateProfileModel model)
         {
             try
             {
@@ -88,14 +88,17 @@ namespace MyBookStore.Api.Controllers
                     user.Firstname = model.Firstname;
                     user.Lastname = model.Lastname;
                     user.Email = model.Email;
-                    user.Roleid = model.Roleid;
+                    user.Password = model.NewPassword;
 
-                    var isSaved = _userRepository.UpdateUser(user);
+                    User isSaved = _userRepository.UpdateUser(user);
 
-                    if (isSaved != null)
+
+                    if (isSaved == null)
                     {
-                        return StatusCode(HttpStatusCode.OK.GetHashCode(), "User detail updated successfully");
+                        return BadRequest("Not Updated");
                     }
+                    UserModel updatedModel = new UserModel(isSaved);
+                    return Ok(updatedModel);
                 }
 
                 return StatusCode(HttpStatusCode.NotFound.GetHashCode(), "No, Such User - Please provide correct information");
