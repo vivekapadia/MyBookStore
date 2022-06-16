@@ -7,6 +7,11 @@ namespace MyBookStore.Models.ViewModels
 {
     public partial class Book
     {
+        public Book()
+        {
+            Carts = new HashSet<Cart>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
@@ -18,5 +23,6 @@ namespace MyBookStore.Models.ViewModels
 
         public virtual Category Category { get; set; }
         public virtual Publisher Publisher { get; set; }
+        public virtual ICollection<Cart> Carts { get; set; }
     }
 }

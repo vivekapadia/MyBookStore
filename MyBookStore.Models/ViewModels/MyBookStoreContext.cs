@@ -18,6 +18,7 @@ namespace MyBookStore.Models.ViewModels
         }
 
         public virtual DbSet<Book> Books { get; set; }
+        public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Publisher> Publishers { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
@@ -74,6 +75,31 @@ namespace MyBookStore.Models.ViewModels
                     .HasForeignKey(d => d.Publisherid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_publisher");
+            });
+
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.ToTable("cart");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Bookid).HasColumnName("bookid");
+
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+                entity.Property(e => e.Userid).HasColumnName("userid");
+
+                entity.HasOne(d => d.Book)
+                    .WithMany(p => p.Carts)
+                    .HasForeignKey(d => d.Bookid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_book");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Carts)
+                    .HasForeignKey(d => d.Userid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_user");
             });
 
             modelBuilder.Entity<Category>(entity =>

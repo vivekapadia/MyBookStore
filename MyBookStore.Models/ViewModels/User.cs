@@ -7,6 +7,11 @@ namespace MyBookStore.Models.ViewModels
 {
     public partial class User
     {
+        public User()
+        {
+            Carts = new HashSet<Cart>();
+        }
+
         public int Id { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
@@ -15,5 +20,6 @@ namespace MyBookStore.Models.ViewModels
         public int Roleid { get; set; }
 
         public virtual Role Role { get; set; }
+        public virtual ICollection<Cart> Carts { get; set; }
     }
 }
